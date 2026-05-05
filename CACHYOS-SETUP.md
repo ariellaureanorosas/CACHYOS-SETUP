@@ -1,6 +1,6 @@
-# 🐧 CachyOS Setup Guide — GTX 1650 + Monitor 180Hz + Aparência macOS
+# 🐧 CachyOS Setup Guide — GTX 1650 + Monitor 180Hz
 
-> Guia completo e testado para configurar o CachyOS com NVIDIA GTX 1650 em modo **Reverse PRIME**, monitor externo a 180Hz com fluidez total, personalização visual inspirada no macOS e otimizações de desempenho.
+> Guia completo e testado para configurar o CachyOS com NVIDIA GTX 1650 em modo **Reverse PRIME**, monitor externo a 180Hz com fluidez total.
 
 **Hardware:** Lenovo IdeaPad Gaming 3i · Intel UHD (iGPU) · NVIDIA GeForce GTX 1650 Mobile  
 **DE:** Cinnamon · **Shell:** Fish · **Kernel:** CachyOS (BORE)
@@ -11,14 +11,7 @@
 
 1. [Diagnóstico do Problema de Fluidez](#1-diagnóstico-do-problema-de-fluidez)
 2. [Solução Definitiva — Reverse PRIME](#2-solução-definitiva--reverse-prime)
-3. [Personalização Visual — Aparência macOS](#3-personalização-visual--aparência-macos)
-4. [Visual Studio Code](#4-visual-studio-code)
-5. [Otimizações de Desempenho](#5-otimizações-de-desempenho)
-6. [Limpeza do Sistema](#6-limpeza-do-sistema)
-7. [Sons do Cinnamon](#7-sons-do-cinnamon)
-8. [Fontes Adicionais](#8-fontes-adicionais)
-9. [Reversão de Emergência](#9-reversão-de-emergência)
-10. [Configuração do Bluetooth](#10-configuração-do-bluetooth)
+3. [Reversão de Emergência](#3-reversão-de-emergência)
 
 ---
 
@@ -32,8 +25,7 @@ A interface parecia travada a ~30fps mesmo com o monitor a 180Hz. Este diagnóst
 nvidia-smi
 ```
 
-> ✅ Resultado esperado: driver NVIDIA (595.71.05) instalado, GPU GeForce GTX 1650 reconhecida.  
-> ❌ `nvidea-smi` → erro de digitação, corrija para `nvidia-smi`.
+> ✅ Resultado esperado: driver NVIDIA (595.71.05) instalado, GPU GeForce GTX 1650 reconhecida.
 
 ### 1.2 Verificar taxa de atualização do monitor
 
@@ -256,364 +248,7 @@ Adicione nos aplicativos de inicialização do Cinnamon:
 
 ---
 
-## 3. Personalização Visual — Aparência macOS
-
-### 3.1 Instalar dependências
-
-```bash
-sudo pacman -S gnome-screenshot git sassc glib2
-```
-
-### 3.2 Tema GTK WhiteSur
-
-```bash
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
-cd WhiteSur-gtk-theme
-./install.sh -t purple -o solid -i arch
-```
-
-| Flag | Descrição |
-|------|-----------|
-| `-t purple` | Cor de destaque roxa (estilo macOS) |
-| `-o solid` | Janelas sólidas, sem transparência |
-| `-i arch` | Ajustes específicos para Arch/CachyOS |
-
-### 3.3 Ícones WhiteSur
-
-```bash
-cd ~
-git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git --depth=1
-cd WhiteSur-icon-theme
-./install.sh
-```
-
-### 3.4 Cursores McMojave
-
-```bash
-cd ~
-git clone https://github.com/vinceliuice/McMojave-cursors.git --depth=1
-cd McMojave-cursors
-sudo cp -r McMojave* /usr/share/icons/
-```
-
-### 3.5 Fonte Inter
-
-```bash
-sudo pacman -S ttf-inter
-```
-
-### 3.6 Dock Plank
-
-```bash
-sudo pacman -S plank
-```
-
-Copie o tema WhiteSur para o Plank:
-
-```bash
-cd ~/WhiteSur-gtk-theme
-cp -r src/other/plank/theme-WhiteSur* ~/.local/share/plank/themes/
-```
-
-Configure o Plank:
-
-```bash
-plank --preferences
-```
-
-Marque **Icon Zoom** e selecione o tema `WhiteSur`.
-
-Adicione o Plank aos aplicativos de inicialização:
-> **Menu → Aplicativos de inicialização → Adicionar**  
-> Nome: `Plank`  
-> Comando: `plank`
-
-### 3.7 Menu Cinnamenu
-
-> **Clique direito no painel → Miniaplicativos → aba Download → procurar "Cinnamenu" → Instalar**
-
-Remova o menu padrão e adicione o Cinnamenu ao painel.
-
-### 3.8 Aplicar temas nas Configurações do Sistema
-
-**Configurações do Sistema → Temas:**
-
-| Elemento | Valor |
-|----------|-------|
-| Temas da área de trabalho | `WhiteSur-light` (ou dark) |
-| Controles | `WhiteSur-light-solid` |
-| Janelas | `WhiteSur-light-solid` |
-| Ícones | `WhiteSur` |
-| Cursores | `McMojave-cursors` |
-
-**Configurações do Sistema → Fontes:**
-
-| Tipo | Fonte | Tamanho |
-|------|-------|---------|
-| Padrão | Inter | 10 |
-| Documento | Inter | 10 |
-| Terminal | Inter Mono (ou monospace) | 10 |
-| Dica de renderização | Subpixel (LCD) ou Leve | — |
-
-### 3.9 Mover painel para o topo (estilo macOS)
-
-> **Clique direito no painel → Mover → clique na borda superior da tela**  
-> **Clique direito no painel → Configurações do painel → marcar "Bloquear painel"**
-
-### 3.10 Limpar repositórios clonados
-
-```bash
-cd ~
-rm -rf WhiteSur-gtk-theme WhiteSur-icon-theme McMojave-cursors
-```
-
-Verificação no fish shell:
-
-```fish
-for dir in WhiteSur-gtk-theme WhiteSur-icon-theme McMojave-cursors
-    test -d $dir; and echo "$dir ainda existe"; or echo "$dir removida"
-end
-```
-
----
-
-## 4. Visual Studio Code
-
-### 4.1 Diferença entre os métodos de instalação
-
-| Método | Pacote | Observação |
-|--------|--------|------------|
-| `pacman` | `code` | Versão open source (VSCodium) |
-| AUR (`paru`) | `visual-studio-code-bin` | Versão oficial Microsoft ✅ Recomendado |
-| Flatpak | `com.visualstudio.code` | Isolado, exige config extra de temas |
-
-> Para manter integração com o tema WhiteSur, use a versão AUR.
-
-### 4.2 Instalar via paru
-
-```bash
-paru -S visual-studio-code-bin
-```
-
-> Pressione `q` para sair do visualizador do PKGBUILD, confirme com `s` (sim).
-
-### 4.3 Instalar fonte JetBrains Mono
-
-```bash
-sudo pacman -S ttf-jetbrains-mono
-```
-
-### 4.4 Instalar extensões
-
-```bash
-code --install-extension ms-python.python
-code --install-extension ms-python.vscode-pylance
-code --install-extension ms-python.black-formatter
-code --install-extension ms-python.isort
-code --install-extension ms-python.flake8
-code --install-extension formulahendry.code-runner
-code --install-extension streetsidesoftware.code-spell-checker
-code --install-extension streetsidesoftware.code-spell-checker-portuguese-brazilian
-code --install-extension PKief.material-icon-theme
-code --install-extension KevinRose.vsc-python-indent
-code --install-extension omaressam.om-theme
-```
-
----
-
-## 5. Otimizações de Desempenho
-
-### 5.1 Kernel com agendador BORE
-
-Abra o **CachyOS Kernel Manager** e instale o kernel `linux-cachyos-bore`. Reinicie após a instalação.
-
-### 5.2 Governador de CPU
-
-```bash
-# Temporário (até reiniciar)
-sudo cpupower frequency-set -g performance
-```
-
-### 5.3 Modo de persistência da NVIDIA
-
-```bash
-sudo nvidia-persistenced
-sudo systemctl enable nvidia-persistenced
-```
-
-### 5.4 PRIME Render Offload
-
-Para executar aplicativos diretamente na GPU NVIDIA:
-
-```bash
-prime-run nome_do_aplicativo
-```
-
-### 5.5 Metapacote de jogos
-
-```bash
-sudo pacman -S cachyos-gaming-meta
-```
-
-> Inclui Gamemode, MangoHud, Steam e bibliotecas de compatibilidade.
-
-### 5.6 Gamemode
-
-```bash
-# Terminal
-gamemoderun ./jogo
-
-# Steam (opções de inicialização do jogo)
-gamemoderun %command%
-```
-
-### 5.7 Ananicy (prioridade automática de processos)
-
-```bash
-sudo pacman -S ananicy
-sudo systemctl enable --now ananicy
-```
-
----
-
-## 6. Limpeza do Sistema
-
-### 6.1 Pacotes órfãos
-
-```bash
-# Listar órfãos
-pacman -Qtdq
-
-# Remover (revise a lista antes de confirmar!)
-sudo pacman -Rns $(pacman -Qtdq)
-```
-
-### 6.2 Cache do pacman
-
-```bash
-# Manter apenas as 3 últimas versões
-sudo paccache -rk3
-
-# Remover pacotes desinstalados do cache
-sudo paccache -ruk0
-```
-
-### 6.3 Cache do paru (AUR)
-
-```bash
-paru -Scc
-
-# Limpar clones antigos
-rm -rf ~/.cache/paru/clone/*
-```
-
-### 6.4 Logs do sistema (journald)
-
-```bash
-# Verificar uso atual
-journalctl --disk-usage
-
-# Manter apenas os últimos 2 dias
-sudo journalctl --vacuum-time=2d
-
-# Limitar tamanho máximo a 500MB
-sudo journalctl --vacuum-size=500M
-```
-
-### 6.5 Cache do usuário
-
-```bash
-# Remover arquivos não acessados há mais de 100 dias
-find ~/.cache/ -type f -atime +100 -delete
-
-# Limpar thumbnails
-rm -rf ~/.cache/thumbnails/*
-
-# Limpar lixeira
-rm -rf ~/.local/share/Trash/*
-```
-
-### 6.6 Detectar arquivos duplicados com rmlint
-
-```bash
-sudo pacman -S rmlint
-
-# Simulação (não remove nada, só lista)
-rmlint ~/
-```
-
-### 6.7 Script de manutenção da comunidade
-
-```bash
-# Fish shell — usar pipe ao invés de substituição de processo
-curl -sL https://raw.githubusercontent.com/7uisu/cachyos-maintenance/main/cachyos-maintenance.sh | bash
-
-# Alternativa: salvar e executar
-curl -sL https://raw.githubusercontent.com/7uisu/cachyos-maintenance/main/cachyos-maintenance.sh \
-  -o /tmp/cachyos-maintenance.sh && bash /tmp/cachyos-maintenance.sh
-```
-
-> ⚠️ No **fish shell**, a sintaxe `$(...)` não funciona em todos os contextos. Use pipes ou salve em arquivo intermediário.
-
----
-
-## 7. Sons do Cinnamon
-
-> **Configurações do Sistema → Som → Sons do sistema**
-
-| Evento | Arquivo de som |
-|--------|---------------|
-| Iniciando o Cinnamon | `service-login.oga` |
-| Saindo do Cinnamon | `service-logout.oga` |
-| Mudando espaço de trabalho | `complete.oga` |
-| Abrindo novas janelas | `dialog-information.oga` |
-| Fechar janelas | `complete.oga` |
-| Minimizando janelas | `bell.oga` |
-| Maximizando janelas | `bell.oga` |
-| Desmaximizando janelas | `bell.oga` |
-| Janelas em mosaico/encaixes | `camera-shutter.oga` |
-| Inserindo um dispositivo | `device-added.oga` |
-| Removendo um dispositivo | `device-removed.oga` |
-| Mostrar notificações | `message.oga` |
-| Alterando volume | `audio-volume-change.oga` |
-
----
-
-## 8. Fontes Adicionais
-
-### 8.1 Fontes para desenvolvimento
-
-```bash
-sudo pacman -S \
-  ttf-jetbrains-mono \
-  ttf-firacode-nerd \
-  ttf-cascadia-code \
-  ttf-iosevka-nerd \
-  ttf-hack \
-  noto-fonts-emoji
-```
-
-### 8.2 Fontes do Windows (opcional)
-
-```bash
-paru -S ttf-ms-win11-auto
-```
-
-### 8.3 Fontes da Apple (opcional)
-
-```bash
-paru -S apple-fonts
-```
-
-### 8.4 Verificar instalação
-
-```bash
-fc-list | grep "JetBrains Mono"
-```
-
----
-
-## 9. Reversão de Emergência
+## 3. Reversão de Emergência
 
 Se o sistema não iniciar ou o monitor não funcionar após as configurações:
 
@@ -640,60 +275,13 @@ systemctl reboot
 
 ---
 
-## 10. Configuração do Bluetooth
-
-### Método 1: Ferramenta gráfica
-
-O CachyOS já inclui ferramentas gráficas de Bluetooth. Verifique no menu de aplicativos por "Bluetooth" antes de prosseguir com o método manual.
-
-### Método 2: Manual (passo a passo)
-
-Se preferir o terminal ou se a ferramenta gráfica não resolveu, o procedimento é idêntico ao do Arch Linux.
-
-#### 10.1 Instalar os componentes essenciais
-
-O protocolo Bluetooth no Linux é gerenciado pelo pacote `bluez`. Execute:
-
-```bash
-sudo pacman -S bluez bluez-utils
-```
-
-Esses dois pacotes instalam a pilha de protocolos e as ferramentas de linha de comando para gerenciar o Bluetooth.
-
-#### 10.2 Ativar e iniciar o serviço
-
-```bash
-sudo systemctl enable --now bluetooth.service
-```
-
-Esse comando ativa o serviço imediatamente e o configura para iniciar automaticamente no boot. Verifique se está rodando:
-
-```bash
-sudo systemctl status bluetooth
-```
-
-> ✅ A resposta deve mostrar `active (running)`.
-
-#### 10.3 Gerenciar o Bluetooth e parear dispositivos
-
-O `bluetoothctl` é a ferramenta principal via terminal. Para uma interface gráfica mais amigável, instale o **Blueman**:
-
-```bash
-sudo pacman -S blueman
-```
-
-Após a instalação, o "Blueman" aparecerá no menu de aplicativos e um ícone de Bluetooth será exibido na bandeja do sistema. Com ele você procura dispositivos, faz pareamento e conecta com alguns cliques.
-
----
-
-## Resumo do que foi feito
+## Resumo
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Problema     → Interface travada a ~30fps com monitor 180Hz    │
 │  Causa raiz   → Modo híbrido Intel+NVIDIA (Optimus/PRIME)       │
 │  Solução      → Reverse PRIME: NVIDIA como GPU principal        │
-│  Extras       → Aparência macOS, VS Code, fontes, limpeza       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -702,15 +290,8 @@ Após a instalação, o "Blueman" aparecerá no menu de aplicativos e um ícone 
 | GPU | NVIDIA GeForce GTX 1650 Mobile |
 | Driver NVIDIA | 595.71.05 |
 | Kernel | linux-cachyos-bore |
-| DE | Cinnamon |
-| Tema GTK | WhiteSur-light-solid |
-| Ícones | WhiteSur |
-| Cursores | McMojave-cursors |
-| Fonte sistema | Inter 10 |
-| Fonte código | JetBrains Mono |
-| Dock | Plank + tema WhiteSur |
-| Menu | Cinnamenu |
 
 ---
-
-*Testado no CachyOS com Cinnamon · Lenovo IdeaPad Gaming 3i · Intel UHD + GTX 1650*
+<p align="center">
+<em>Testado no CachyOS com Cinnamon · Lenovo IdeaPad Gaming 3i · Intel UHD + GTX 1650</em>
+</p>
