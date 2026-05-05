@@ -111,6 +111,7 @@ xrandr --output eDP-1-1 --auto --right-of HDMI-0
 | [🔊 Sons](CACHYOS-SETUP.md#7-sons-do-cinnamon) | Mapeamento de eventos |
 | [🔤 Fontes](CACHYOS-SETUP.md#8-fontes-adicionais) | Instalação de fontes |
 | [🆘 Reversão](CACHYOS-SETUP.md#9-reversão-de-emergência) | Desfazer em caso de emergência |
+| [🔵 Bluetooth](CACHYOS-SETUP.md#10-configuração-do-bluetooth) | bluez, bluez-utils e Blueman |
 
 ---
 
