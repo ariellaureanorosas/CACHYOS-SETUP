@@ -18,6 +18,7 @@
 7. [Sons do Cinnamon](#7-sons-do-cinnamon)
 8. [Fontes Adicionais](#8-fontes-adicionais)
 9. [Reversão de Emergência](#9-reversão-de-emergência)
+10. [Configuração do Bluetooth](#10-configuração-do-bluetooth)
 
 ---
 
@@ -49,25 +50,7 @@ HDMI-1-0 connected 1920x1080+0+0 (normal left inverted right x axis y axis) 527m
 
 O `*` indica a taxa ativa. Se aparecer `180.00*`, os 180Hz estão ativos — o problema não é a taxa configurada.
 
-### 1.3 Tentativa: fixar clock mínimo da GPU (PowerMizer)
-
-Hipótese: a GPU reduzia o clock para 300MHz quando ociosa, causando atrasos.
-
-```bash
-sudo nvidia-smi -lgc 700,2100
-```
-
-> Isso fixa o clock entre 700MHz e 2100MHz. Pode ajudar, mas não resolve o problema principal.
-
-### 1.4 Tentativa: ForceFullCompositionPipeline (falhou)
-
-```bash
-nvidia-settings --assign CurrentMetaMode="HDMI-1-0: 1920x1080_180 +0+0 { ForceFullCompositionPipeline = On }"
-```
-
-> ❌ Erro: `Error resolving target specification`. Os nomes do xrandr não correspondem aos nomes internos do driver NVIDIA nesse modo.
-
-### 1.5 Identificar a causa raiz: modo híbrido Intel+NVIDIA
+### 1.3 Identificar a causa raiz: modo híbrido Intel+NVIDIA
 
 ```bash
 glxinfo | grep -i "server glx vendor"
@@ -654,6 +637,52 @@ systemctl reboot
 ```
 
 > ✅ O sistema voltará ao modo híbrido original, com a Intel controlando tudo. Perda de fluidez a 180Hz, mas o sistema volta a funcionar normalmente.
+
+---
+
+## 10. Configuração do Bluetooth
+
+### Método 1: Ferramenta gráfica
+
+O CachyOS já inclui ferramentas gráficas de Bluetooth. Verifique no menu de aplicativos por "Bluetooth" antes de prosseguir com o método manual.
+
+### Método 2: Manual (passo a passo)
+
+Se preferir o terminal ou se a ferramenta gráfica não resolveu, o procedimento é idêntico ao do Arch Linux.
+
+#### 10.1 Instalar os componentes essenciais
+
+O protocolo Bluetooth no Linux é gerenciado pelo pacote `bluez`. Execute:
+
+```bash
+sudo pacman -S bluez bluez-utils
+```
+
+Esses dois pacotes instalam a pilha de protocolos e as ferramentas de linha de comando para gerenciar o Bluetooth.
+
+#### 10.2 Ativar e iniciar o serviço
+
+```bash
+sudo systemctl enable --now bluetooth.service
+```
+
+Esse comando ativa o serviço imediatamente e o configura para iniciar automaticamente no boot. Verifique se está rodando:
+
+```bash
+sudo systemctl status bluetooth
+```
+
+> ✅ A resposta deve mostrar `active (running)`.
+
+#### 10.3 Gerenciar o Bluetooth e parear dispositivos
+
+O `bluetoothctl` é a ferramenta principal via terminal. Para uma interface gráfica mais amigável, instale o **Blueman**:
+
+```bash
+sudo pacman -S blueman
+```
+
+Após a instalação, o "Blueman" aparecerá no menu de aplicativos e um ícone de Bluetooth será exibido na bandeja do sistema. Com ele você procura dispositivos, faz pareamento e conecta com alguns cliques.
 
 ---
 
