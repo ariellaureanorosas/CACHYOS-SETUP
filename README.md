@@ -9,18 +9,15 @@
  ╚═════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝
 ```
 
-### `GTX 1650 · 180Hz · Reverse PRIME · macOS Look`
+### `GTX 1650 · 180Hz · Reverse PRIME`
 
-**Guia completo para CachyOS com NVIDIA em notebook híbrido — do diagnóstico ao sistema finalizado.**
+**Guia para CachyOS com NVIDIA em notebook híbrido — do diagnóstico ao monitor externo funcionando.**
 
 ---
 
 ![CachyOS](https://img.shields.io/badge/CachyOS-Arch_Based-blue?style=flat-square&logo=archlinux&logoColor=white)
-![Cinnamon](https://img.shields.io/badge/DE-Cinnamon-green?style=flat-square)
 ![NVIDIA](https://img.shields.io/badge/GPU-GTX_1650-76B900?style=flat-square&logo=nvidia&logoColor=white)
 ![Kernel](https://img.shields.io/badge/Kernel-BORE-orange?style=flat-square)
-![Shell](https://img.shields.io/badge/Shell-Fish-lightblue?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
 </div>
 
@@ -46,23 +43,6 @@ Em notebooks com arquitetura híbrida Intel + NVIDIA (Optimus/PRIME), a **Intel 
 | 🖥️ Monitor externo | 1920×1080 @ 180Hz (HDMI) |
 | 🐧 Distro | CachyOS |
 | 🖥️ DE | Cinnamon |
-| 🐟 Shell | Fish |
-
----
-
-## O que este guia cobre
-
-```
-📌 Diagnóstico     → identificar por que a interface trava a 180Hz
-⚡ Reverse PRIME   → NVIDIA como GPU principal, Intel como secundária
-🍎 Aparência       → tema macOS completo (WhiteSur, Plank, Cinnamenu)
-💻 VS Code         → instalação AUR + extensões Python + configurações
-🚀 Performance     → kernel BORE, Gamemode, Ananicy, PowerMizer
-🧹 Limpeza         → pacotes órfãos, cache, logs, duplicados
-🔊 Sons            → mapeamento completo dos eventos do Cinnamon
-🔤 Fontes          → JetBrains Mono, Inter, Nerd Fonts e mais
-🆘 Reversão        → como desfazer tudo se algo der errado
-```
 
 ---
 
@@ -104,14 +84,7 @@ xrandr --output eDP-1-1 --auto --right-of HDMI-0
 |-------|-----------|
 | [📋 Diagnóstico](CACHYOS-SETUP.md#1-diagnóstico-do-problema-de-fluidez) | Identificar e entender o problema |
 | [⚙️ Reverse PRIME](CACHYOS-SETUP.md#2-solução-definitiva--reverse-prime) | Configuração completa da GPU |
-| [🍎 Aparência macOS](CACHYOS-SETUP.md#3-personalização-visual--aparência-macos) | WhiteSur, Plank, cursores, fontes |
-| [💻 VS Code](CACHYOS-SETUP.md#4-visual-studio-code) | Instalação e extensões |
-| [🚀 Performance](CACHYOS-SETUP.md#5-otimizações-de-desempenho) | Kernel, Gamemode, Ananicy |
-| [🧹 Limpeza](CACHYOS-SETUP.md#6-limpeza-do-sistema) | Cache, órfãos, logs |
-| [🔊 Sons](CACHYOS-SETUP.md#7-sons-do-cinnamon) | Mapeamento de eventos |
-| [🔤 Fontes](CACHYOS-SETUP.md#8-fontes-adicionais) | Instalação de fontes |
-| [🆘 Reversão](CACHYOS-SETUP.md#9-reversão-de-emergência) | Desfazer em caso de emergência |
-| [🔵 Bluetooth](CACHYOS-SETUP.md#10-configuração-do-bluetooth) | bluez, bluez-utils e Blueman |
+| [🆘 Reversão](CACHYOS-SETUP.md#3-reversão-de-emergência) | Desfazer em caso de emergência |
 
 ---
 
@@ -124,14 +97,6 @@ xrandr --output eDP-1-1 --auto --right-of HDMI-0
 | **Driver** | NVIDIA 595.71.05 |
 | **Kernel** | linux-cachyos-bore |
 | **Modo GPU** | Reverse PRIME |
-| **Tema GTK** | WhiteSur-light-solid |
-| **Ícones** | WhiteSur |
-| **Cursores** | McMojave |
-| **Dock** | Plank + WhiteSur theme |
-| **Menu** | Cinnamenu |
-| **Fonte sistema** | Inter 10 |
-| **Fonte código** | JetBrains Mono |
-| **Editor** | VS Code (AUR) |
 
 </div>
 
@@ -141,7 +106,7 @@ xrandr --output eDP-1-1 --auto --right-of HDMI-0
 
 > Este guia foi escrito e testado especificamente no hardware descrito. BusIDs, nomes de saídas (`HDMI-0`, `eDP-1-1`) e versões de driver podem variar no seu sistema. Sempre confirme os valores com `lspci` e `xrandr` antes de aplicar as configurações.
 
-Em caso de falha na inicialização, consulte a [seção de reversão de emergência](CACHYOS-SETUP.md#9-reversão-de-emergência).
+Em caso de falha na inicialização, consulte a [seção de reversão de emergência](CACHYOS-SETUP.md#3-reversão-de-emergência).
 
 ---
 
